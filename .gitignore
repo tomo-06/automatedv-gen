@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.egg-info/
+dist/
+build/
+
+# dbt
+target/
+dbt_packages/
+logs/
+.user.yml
+
+# env
+.env
+*.local.yml
+
+# editor / OS
+.vscode/
+.DS_Store
