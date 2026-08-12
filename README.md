@@ -13,3 +13,29 @@ Work in progress. Not yet usable.
 ## License
 
 Apache-2.0
+
+
+## Requirements
+
+- WSL2 (Ubuntu) / Docker Desktop
+- uv
+- make
+
+## Setup
+
+```bash
+uv sync
+make up      # PostgreSQL を起動
+make deps    # dbt パッケージを導入
+make debug   # 接続確認
+```
+
+## Commands
+
+| Command | Description |
+|---|---|
+| `make up` / `make down` | PostgreSQL の起動 / 停止 |
+| `make deps` | dbt パッケージの導入 |
+| `make debug` | dbt の接続確認 |
+| `make build` | dbt の build 実行 |
+| `make clean` | dbt の生成物削除 |

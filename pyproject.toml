@@ -1,0 +1,18 @@
+[project]
+name = "automatedv-gen"
+version = "0.1.0"
+description = "Generate AutomateDV metadata and dbt models from source table metadata"
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+license = { text = "Apache-2.0" }
+dependencies = []
+
+[dependency-groups]
+dev = [
+    "dbt-core>=1.10,<1.11",
+    "dbt-postgres>=1.10,<1.11",
+    "pytest>=8.0",
+]
+
+[tool.uv]
+package = false
