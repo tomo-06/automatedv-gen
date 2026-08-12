@@ -1,0 +1,25 @@
+name: 'advgen_demo'
+version: '0.1.0'
+config-version: 2
+
+profile: 'advgen_demo'
+
+model-paths: ["models"]
+seed-paths: ["seeds"]
+macro-paths: ["macros"]
+test-paths: ["tests"]
+snapshot-paths: ["snapshots"]
+clean-targets: ["target", "dbt_packages"]
+
+models:
+  advgen_demo:
+    staging:
+      +materialized: view
+      +schema: stage
+    raw_vault:
+      +materialized: incremental
+      +schema: dv
+
+seeds:
+  advgen_demo:
+    +schema: raw
