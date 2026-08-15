@@ -31,4 +31,9 @@ models:
   advgen_demo:
     staging:
       +materialized: view
-      +schema: stage
+      +schema: staging
+
+    raw_vault:
+      +materialized: incremental
+      +schema: raw_vault
+      +on_schema_change: fail
