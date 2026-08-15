@@ -1,0 +1,20 @@
+version: 2
+
+models:
+  - name: stg_crm_customer
+    description: CRM 顧客のプライムステージ。ビジネスキーを正規化し、ハッシュキーを付与する。
+    data_tests:
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "length(regexp_replace(customer_id, '[^0-9]', '', 'g')) <= 4"
+    columns:
+      - name: customer_hk
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_bk
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                expression: "~ '^[0-9]{4}$'"
