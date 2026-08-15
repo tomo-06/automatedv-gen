@@ -11,15 +11,24 @@ test-paths: ["tests"]
 snapshot-paths: ["snapshots"]
 clean-targets: ["target", "dbt_packages"]
 
+vars:
+  hash: sha
+
+seeds:
+  advgen_demo:
+    +schema: raw
+    crm_customer:
+      +column_types:
+        customer_id: varchar(20)
+        customer_name: varchar(100)
+        email: varchar(200)
+        phone: varchar(20)
+        address: varchar(200)
+        updated_at: timestamp
+        crm_ingested_at: timestamp
+
 models:
   advgen_demo:
     staging:
       +materialized: view
       +schema: stage
-    raw_vault:
-      +materialized: incremental
-      +schema: dv
-
-seeds:
-  advgen_demo:
-    +schema: raw
