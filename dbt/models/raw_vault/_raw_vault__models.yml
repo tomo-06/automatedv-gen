@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: hub_csutomer
+    columns:
+      - name: customer_hk
+        data_tests:
+          - not_null
+          - unique
+      - name: customer_bk
+        data_tests:
+          - not_null
+          - unique
+      - name: load_datetime
+        data_tests:
+          - not_null
+      - name: record_source
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['crm_customer']

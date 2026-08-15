@@ -282,3 +282,35 @@ SQL の問題と設定の問題を切り分けやすい。
   - 前後空白付きのキー、小文字のキーも同一形式に収束
 - `count(distinct customer_hk)` = 10
 - 入力前提の検証テストが、想定外の桁数の混入時に FAIL することを確認済み
+
+| Hub のマテリアライゼーション | incremental。`unique_key` は設定しない | 2026/08/15 |
+| Hub モデルの config 記述場所 | モデル側に `config()` で記述。`dbt_project.yml` には `+schema` のみ | 2026/08/15 |
+| スキーマ構成 | staging / raw_vault に分離。`generate_schema_name` は上書きしない | 2026/08/15 |
+| Hub のテスト範囲 | HK / BK の unique・not_null。形式検証はステージング層に置く | 2026/08/15 |
+| source_model の記述形式 | 単一ソースでもリスト形式で記述する | 2026/08/15 |
+
+
+### Hub に unique_key を設定しない理由
+
+dbt-postgres は `unique_key` が指定されると incremental 戦略が
+`delete+insert` に切り替わる。AutomateDV の Hub マクロは
+既存ハッシュキーを LEFT JOIN で除外した差分のみを出力する設計であり、
+append（Postgres のデフォルト）が正しい。
+`unique_key` を設定すると既存行の削除と再挿入が発生し、
+Data Vault の追記のみという原則に反する。
+
+### スキーマ名を上書きしない理由
+
+dbt の `+schema` は profiles.yml の schema に対する**サフィックス付与**であり、
+置換ではない（`dbt_dev` + `raw_vault` → `dbt_dev_raw_vault`）。
+`generate_schema_name` マクロを上書きすればサフィックスを外せるが、
+target ごとのスキーマ分離が壊れ CI で衝突するリスクがあるため採用しない。
+
+### 形式検証をステージング層に置く理由
+
+Hub の business key に `unique` を置いても、ビジネスキー正規化の
+漏れは検出できない。正規化されないまま異なる形式のキーが流入した場合、
+ハッシュキーも異なる値になるため `unique` は通過し、
+重複した実体が2行として蓄積されるだけになる。
+形式の逸脱を検出できるのは、正規化を実施する層＝ステージング層のみである。
+テストは「その層が生み出す不変条件」に対して置く。
